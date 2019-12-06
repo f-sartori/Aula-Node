@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Exercicio Comentarios</title>
+
+</head>
+
+<body>
+
+
+
+
+    <div style="align-content: center">
+        <div class="input-group mb-3" style="width: 500px; padding: 10px">
+            <input type="number" id="pesquisa" class="form-control" placeholder="Digite um numero" aria-label="Digite um numero" aria-describedby="button-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" value="Localizar" onclick="searchComment()">Localizar</button>
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" value="Localizar" onclick="getAll()">Localizar todos</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <p id="textError"></p>
+
+    <div style="width: 1000px">
+        <h1>Informações sobre o Post</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Informações:</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                
+                <tr>
+                    <th scope="row" id="name"></th>
+
+
+                </tr>
+                <tr>
+                    <th scope="row" id="sobrenome"></th>
+
+
+                </tr>
+                <tr>
+                    <th scope="row" id="idade"></th>
+
+
+                </tr>
+                <tr>
+                    <th scope="row" id="nota"></th>
+
+
+                </tr>
+                <tr>
+                    <th scope="row" id="situacao"></th>
+
+
+                </tr>
+            </tbody>
+        </table>
+
+        <p id="teste"></p>
+
+        <table id="table2" class="table" style="visibility: hidden">
+            <thead>
+                <tr>
+                    
+                    <th scope="col">Nome</th>
+                    <th scope="col">Sobrenome</th>
+                    <th scope="col">Idade</th>
+                    <th scope="col">Nota</th>
+                    <th scope="col">Situação</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                <tr>
+
+                </tr>
+
+
+            </tbody>
+
+
+
+        </table>
+
+
+
+
+
+    </div>
+
+    <script>
+        function searchComment() {
+            var idComment = document.getElementById("pesquisa").value;
+
+            if (idComment <= 0) {
+                document.getElementById("textError").innerHTML = "Você precisa selecionar um numero mair que 0";
+            } else {
+                getComment(idComment);
+                document.getElementById("textError").innerHTML = "";
+            }
+
+        }
+
+    
+        function getComment(id) {
+
+            //fatch metodo para consumo de serviços de api
+            fetch(`http://localhost:3000/aluno/${id}`, {
+                    method: 'GET'
+                })
+                .then(response => response.json()) //converte valor recebido em objeto json
+                .then(json => passJson(json)) //chamando a função passJson e passando o objeto
+            }
+
+        function getAll() {
+
+            //fatch metodo para consumo de serviços de api
+            fetch(`http://localhost:3000/aluno`, {
+                    method: 'GET'
+                })
+                .then(response => response.json()) //converte valor recebido em objeto json
+                .then(j => passAll(j)) //chamando a função passJson e passando o objeto
+        }
+
+
+        function passJson(json) {
+
+            //Manipulando o DOM para renderizar os objetos 'acessando valores do objeto'
+            
+            document.getElementById("name").innerHTML = `Nome: ${json.Nome}`;
+            document.getElementById("sobrenome").innerHTML = `Sobrenome: ${json.Sobrenome}`;
+            document.getElementById("idade").innerHTML = `Idade: ${json.Idade}`;
+            document.getElementById("nota").innerHTML = `Nota: ${json.Nota}`;
+            document.getElementById("situacao").innerHTML = `Situacao: ${json.Situacao}`;
+
+        }
+
+        function passAll(j) {
+            var table2 = document.getElementById("table2");
+            var table = document.getElementById("tbody");
+            for (let i = 0; i < j.length; i++) {
+                table.innerHTML += `<tr>
+
+                        
+                        <td >${j[i].Nome}</td>
+                        <td >${j[i].Sobrenome}</td>
+                        <td >${j[i].Idade}</td>
+                        <td >${j[i].Nota}</td>
+                        <td >${j[i].Situacao}</td>
+                        </tr>`;
+
+                table2.style.visibility = "visible";
+            }
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+
+</html>
